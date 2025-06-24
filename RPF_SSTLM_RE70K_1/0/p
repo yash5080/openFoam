@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2212                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+pOut            7770.989;
+
+internalField   uniform $pOut;
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+boundaryField
+{
+    inlet
+    {
+        type            totalPressure;
+        p0              uniform 10779.149;   // Total pressure in Pascals
+        gamma           1.4;                 // Specific heat ratio
+        value           uniform 10779.149;   // Dummy value, not used directly
+    }
+
+    outlet
+    {
+        type            fixedValue;
+        value           uniform 7770.989;
+    }
+
+    ss
+    {
+        type            zeroGradient;
+    }
+
+    ps
+    {
+        type            zeroGradient;
+    }
+
+    periodic1
+    {
+        type            cyclic;
+    }
+
+    periodic2
+    {
+        type            cyclic;
+    }
+
+
+
+    wall-fluid_domain
+{
+    type            zeroGradient;  // or fixedValue, as needed
+}
+
+    frontAndBackPlanes
+    {
+        type            empty;
+    }
+}
+// ************************************************************************* //

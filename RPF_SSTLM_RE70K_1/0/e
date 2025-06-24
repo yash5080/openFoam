@@ -1,0 +1,60 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2212                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      e;
+}
+
+dimensions      [0 2 -2 0 0 0 0];  // J/kg
+
+internalField   uniform 2.5e5;  // e = (Cp - R) * T ≈ 2.15e5 to 2.5e5 for T ≈ 300 K
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedValue;
+        value           uniform 2.5e5;
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    wall-fluid_domain
+    {
+        type            zeroGradient;
+    }
+
+    periodic1
+    {
+        type            cyclic;
+    }
+
+    periodic2
+    {
+        type            cyclic;
+    }
+
+    ps
+    {
+        type            zeroGradient;
+    }
+
+    ss
+    {
+        type            zeroGradient;
+    }
+}
+
