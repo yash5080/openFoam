@@ -1,0 +1,130 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2212                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     rhoPimpleFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         0.001;
+
+deltaT          1e-8;
+
+writeControl    runTime;
+
+writeInterval   0.0001;
+
+purgeWrite      0;
+
+writeFormat     binary;
+
+writePrecision  10;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  yes;
+
+maxCo           0.3;
+
+maxDeltaT       0.1;
+
+// Essential monitoring functions
+		functions
+{
+    fieldMinMax
+    {
+        type            fieldMinMax;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+        fields          (p T U k omega);
+    }
+
+    CourantNo
+    {
+        type            CourantNo;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+    }
+
+    residuals
+    {
+        type            residuals;
+        libs            ("libutilityFunctionObjects.so");
+        fields          (U p k omega e);
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+    }
+
+    forces
+    {
+        type            forces;
+        libs            ("libforces.so");
+        patches         (ss ps);         // adjust to match your surface names
+        rho             rho;
+        p               p;
+        U               U;
+        log             true;
+        writeControl    timeStep;
+        writeInterval   1;
+        CofR            (0 0 0);         // center of rotation (if needed)
+    }
+
+    forceCoeffs
+    {
+        type            forceCoeffs;
+        libs            ("libforces.so");
+        patches         (ss ps);
+        rho             rho;
+	 rhoInf          1.184;
+        p               p;
+        U               U;
+        log             true;
+        writeControl    timeStep;
+        writeInterval   1;
+        CofR            (0 0 0);
+        liftDir         (0 1 0);         // adjust as per your coordinate system
+        dragDir         (1 0 0);
+        pitchAxis       (0 0 1);
+        magUInf         145;             // freestream speed magnitude
+        lRef            1;               // reference length
+        Aref            1;               // reference area
+    }
+
+    yPlus
+    {
+        type            yPlus;
+        libs            ("libfieldFunctionObjects.so");
+        writeControl    timeStep;
+        writeInterval   1;
+        log             true;
+    }
+}
+
+// ************************************************************************* //

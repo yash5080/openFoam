@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      createPatchDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+pointSync true;  // Added to synchronize points across cyclic patches
+
+patches
+(
+    {
+        name periodic2;
+        patchInfo
+        {
+            type cyclic;
+            neighbourPatch periodic1;
+            transform translational;
+            separationVector (0 32.95 0);
+        }
+        constructFrom patches;
+        patches (periodic2);
+    }
+    {
+        name periodic1;
+        patchInfo
+        {
+            type cyclic;
+            neighbourPatch periodic2;
+            transform translational;
+            separationVector (0 -32.95 0);
+        }
+        constructFrom patches;
+        patches (periodic1);
+    }
+);
+
+// ************************************************************************* //
